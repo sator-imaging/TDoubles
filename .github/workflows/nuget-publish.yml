@@ -1,0 +1,44 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Release Build
+      run: |
+        dotnet restore
+        dotnet build --no-restore  -c Release
+
+    - name: Test
+      run: |
+        for FILE in tests/**/Test*.csproj; do
+          if [ -f "$FILE" ]; then
+            echo "Testing: $FILE"
+            dotnet run --project "$FILE"
+          fi
+        done
+
+    ################################
+    #  NUGET
+    - name: NuGet Publish
+      run: |
+        cd src
+        dotnet nuget push "bin/Release/*.nupkg"  \
+          -k ${{ secrets.NUGET_API_KEY }}  \
+          -s https://api.nuget.org/v3/index.json \
+          --timeout 60
