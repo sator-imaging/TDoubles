@@ -13,12 +13,12 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
-    - name: Release Build
+    - name: Pack (release)
       run: |
         cd src
-        dotnet nuget pack -c Release
+        dotnet pack -c Release
 
-    - name: Test
+    - name: Test (release)
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
