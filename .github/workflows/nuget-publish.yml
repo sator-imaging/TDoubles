@@ -18,12 +18,12 @@ jobs:
         cd src
         dotnet pack -c Release
 
-    - name: Test (release)
+    - name: Test (-c Debug)
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"  -c Release
+            dotnet run --project "$FILE"  # must run in debug config (path is hard coded) #-c Release
           fi
         done
 
