@@ -54,7 +54,6 @@
     <PackageProjectUrl>$(NuGetPublishWebsite)</PackageProjectUrl>
     <RepositoryUrl>$(NuGetPublishRepository)</RepositoryUrl>
     <PackageReleaseNotes>$(NuGetPublishReleaseNote)</PackageReleaseNotes>
-    <PackageLicenseUrl>$(NuGetPublishLicenseUrl)</PackageLicenseUrl>
     <PackageIconUrl>$(NuGetPublishIconUrl)</PackageIconUrl>
   </PropertyGroup>
 

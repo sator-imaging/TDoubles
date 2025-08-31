@@ -19,7 +19,6 @@
     <NuGetPublishWebsite>https://x.com/sator_imaging</NuGetPublishWebsite>
     <NuGetPublishRepository>https://github.com/sator-imaging/TDoubles</NuGetPublishRepository>
     <NuGetPublishReleaseNote>https://github.com/sator-imaging/TDoubles</NuGetPublishReleaseNote>
-    <NuGetPublishLicenseUrl>https://github.com/sator-imaging/TDoubles/blob/main/LICENSE.md</NuGetPublishLicenseUrl>
     <NuGetPublishIconUrl>https://github.com/sator-imaging/TDoubles/raw/main/$(NuGetPublishIconFile)</NuGetPublishIconUrl>
   </PropertyGroup>
 
