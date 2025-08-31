@@ -1,0 +1,26 @@
+<Project>
+
+  <PropertyGroup Label="NuGetPublishSettings">
+    <NuGetPublishVersion>0.1.0</NuGetPublishVersion>
+    <NuGetPublishVersionSuffix>-rc.1</NuGetPublishVersionSuffix>
+    <!-- relative path from .csproj files, without trailing slash -->
+    <NuGetPublishProjectRootRelPath>..</NuGetPublishProjectRootRelPath>
+    <NuGetPublishIconFile>icon-128px.png</NuGetPublishIconFile>
+    <NuGetPublishReadmeFile>README.md</NuGetPublishReadmeFile>
+    <NuGetPublishID>SatorImaging.TDoubles</NuGetPublishID>
+    <NuGetPublishTitle>TDoubles</NuGetPublishTitle>
+    <NuGetPublishProduct>$(NuGetPublishTitle)</NuGetPublishProduct>
+    <NuGetPublishOwner>Sator Imaging</NuGetPublishOwner>
+    <NuGetPublishCompany>$(NuGetPublishOwner)</NuGetPublishCompany>
+    <NuGetPublishCopyright>(c) 2025 $(NuGetPublishOwner)</NuGetPublishCopyright>
+    <NuGetPublishLicenseSPDX>MIT</NuGetPublishLicenseSPDX>
+    <NuGetPublishDescription>Incremental source generator for creating mock wrapper classes.</NuGetPublishDescription>
+    <NuGetPublishTags>Unit, Testing, Test, Doubles, Mocking, Roslyn, source generator</NuGetPublishTags>
+    <NuGetPublishWebsite>https://x.com/sator_imaging</NuGetPublishWebsite>
+    <NuGetPublishRepository>https://github.com/sator-imaging/TDoubles</NuGetPublishRepository>
+    <NuGetPublishReleaseNote>https://github.com/sator-imaging/TDoubles</NuGetPublishReleaseNote>
+    <NuGetPublishLicenseUrl>https://github.com/sator-imaging/TDoubles/blob/main/LICENSE.md</NuGetPublishLicenseUrl>
+    <NuGetPublishIconUrl>https://github.com/sator-imaging/TDoubles/raw/main/$(NuGetPublishIconFile)</NuGetPublishIconUrl>
+  </PropertyGroup>
+
+</Project>

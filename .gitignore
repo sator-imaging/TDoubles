@@ -1,0 +1,13 @@
+.*
+*.md
+
+**/assets
+**/bin
+**/obj
+
+!.gitignore
+
+![A-Z]*.md
+!docs/**/*.md
+
+**/AGENTS*.md
