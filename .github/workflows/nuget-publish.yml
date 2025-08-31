@@ -1,8 +1,4 @@
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -19,15 +15,15 @@ jobs:
 
     - name: Release Build
       run: |
-        dotnet restore
-        dotnet build --no-restore  -c Release
+        cd src
+        dotnet nuget pack -c Release
 
     - name: Test
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"
+            dotnet run --project "$FILE"  -c Release
           fi
         done
 
