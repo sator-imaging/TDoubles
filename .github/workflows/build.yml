@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: |
+        for FILE in tests/**/Test*.csproj; do
+          if [ -f "$FILE" ]; then
+            echo "Testing: $file"
+            dotnet run --project "$file"
+          fi
+        done
