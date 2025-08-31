@@ -29,7 +29,7 @@ jobs:
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
-            echo "Testing: $file"
-            dotnet run --project "$file"
+            echo "Testing: $FILE"
+            dotnet run --project "$FILE"
           fi
         done
