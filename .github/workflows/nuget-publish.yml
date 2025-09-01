@@ -15,8 +15,14 @@ jobs:
 
     - name: Pack (release)
       run: |
+
+        # NOTE: .csproj has reference to 'built' .dll file but it has condition parameter to
+        #       avoid file missing error on first build. so, need to build assembly and then
+        #       delete resulting, incomplete .nupkg file. then, build again by `dotnet pack` to
+        #       create valid package file.
         cd src
         dotnet build  -c Release  -p:ContinuousIntegrationBuild=true
+        rm -f bin/Release/*.nupkg
         dotnet pack   -c Release
 
     - name: Test (release)
