@@ -43,8 +43,8 @@ namespace TDoubles
             sb.AppendLine("#pragma warning disable IDE1005  // Use conditional delegate call");
             sb.AppendLine("#pragma warning disable SMA0031  // Mutable Struct Field marked as Read-Only");
             sb.AppendLine("#pragma warning disable SMA0040  // Missing Using Statement");
-            sb.AppendLine();
 #endif
+            sb.AppendLine();
 
             // Generate namespace
             if (!string.IsNullOrEmpty(BlueprintHelpers.GetMockNamespace(blueprint)))
