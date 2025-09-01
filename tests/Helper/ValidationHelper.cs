@@ -23,7 +23,14 @@ namespace TDoubles.Tests.ComprehensiveValidation
 
         public static GeneratorValidationModel Create(string projectDirectory)
         {
-            string generatorAssemblyPath = "src/bin/Debug/netstandard2.0/TDoubles.dll";
+            string generatorAssemblyPath
+#if DEBUG
+            = "src/bin/Debug/netstandard2.0/SatorImaging.TDoubles.dll"
+#else
+            = "src/bin/Release/netstandard2.0/SatorImaging.TDoubles.dll"
+#endif
+            ;
+
             return new GeneratorValidationModel(projectDirectory, generatorAssemblyPath, "TDoubles.TDoublesSourceGenerator");
         }
     }

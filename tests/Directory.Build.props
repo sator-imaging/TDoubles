@@ -1,0 +1,10 @@
+<Project>
+
+  <!-- don't create LANG dir in bin/ folder -->
+  <PropertyGroup Condition=" '$(ContinuousIntegrationBuild)' != 'true' ">
+    <SatelliteResourceLanguages>en;en-US</SatelliteResourceLanguages>
+    <AvailableCultures>en</AvailableCultures>
+    <SupportedCultures>en</SupportedCultures>
+  </PropertyGroup>
+
+</Project>

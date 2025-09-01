@@ -23,6 +23,24 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" PrivateAssets="all" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <!-- .NET 5+ Analyzer -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <!-- https://learn.microsoft.com/ja-jp/dotnet/core/project-sdk/msbuild-props#analysislevel -->
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <!-- nuget.org publish settings -->
 	<ItemGroup>
 		<None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishIconFile)">
@@ -42,6 +60,7 @@
     <PackageVersion>$(NuGetPublishVersion)$(NuGetPublishVersionSuffix)</PackageVersion>
     <Version>$(NuGetPublishVersion)$(NuGetPublishVersionSuffix)</Version>
 
+    <AssemblyName>$(NuGetPublishID)</AssemblyName>
     <PackageId>$(NuGetPublishID)</PackageId>
     <Title>$(NuGetPublishTitle)</Title>
     <Product>$(NuGetPublishProduct)</Product>
@@ -56,19 +75,14 @@
     <PackageReleaseNotes>$(NuGetPublishReleaseNote)</PackageReleaseNotes>
     <PackageIconUrl>$(NuGetPublishIconUrl)</PackageIconUrl>
   </PropertyGroup>
-
-  <!-- .NET 5+ Analyzer -->
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <!-- https://learn.microsoft.com/ja-jp/dotnet/core/project-sdk/msbuild-props#analysislevel -->
-    <AnalysisLevel>latest-Recommended</AnalysisLevel>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  <!-- https://github.com/dotnet/roslyn/blob/main/docs/features/incremental-generators.cookbook.md#package-a-generator-as-a-nuget-package -->
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
   </PropertyGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+  <ItemGroup>
+    <!-- Package the generator in the analyzer directory of the nuget package -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 
 </Project>
