@@ -16,15 +16,15 @@ jobs:
     - name: Pack (release)
       run: |
         cd src
-        dotnet build  -p:ContinuousIntegrationBuild=true  -c Release
-        dotnet pack  --no-build  -c Release
+        dotnet build  -c Release  -p:ContinuousIntegrationBuild=true
+        dotnet pack   -c Release  --no-build
 
-    - name: Test (-c Debug)
+    - name: Test (release)
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"  -p:ContinuousIntegrationBuild=true  -c Release
+            dotnet run --project "$FILE"  -c Release  -p:ContinuousIntegrationBuild=true
           fi
         done
 
