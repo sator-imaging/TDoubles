@@ -17,7 +17,7 @@ jobs:
       run: |
         cd src
         dotnet build  -c Release  -p:ContinuousIntegrationBuild=true
-        dotnet pack   -c Release  --no-build
+        dotnet pack   -c Release
 
     - name: Test (release)
       run: |
