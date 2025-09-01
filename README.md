@@ -286,12 +286,10 @@ Add the following to your project file (`.csproj`):
 - **.NET Framework**: .NET Standard 2.0 or higher
 - **C# Language Version**: C# 7.3 or later
 - **Compatible Runtimes**:
-  - .NET Framework 4.6.1+
-  - .NET Core 2.0+
-  - .NET 5.0+
-  - .NET 6.0+
-  - .NET 7.0+
-  - .NET 8.0+
+    - .NET Framework 4.6.1+
+    - .NET Core 2.0+
+    - .NET 5.0+
+    - Unity 2022.3.12f1 or later
 
 
 ## Setup and Configuration
