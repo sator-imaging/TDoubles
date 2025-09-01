@@ -1,13 +1,13 @@
-[![](https://img.shields.io/github/actions/workflow/status/sator-imaging/TDoubles/build.yml?branch=main)](https://github.com/sator-imaging/TDoubles/actions)
-[![](https://img.shields.io/nuget/vpre/SatorImaging.TDoubles)](https://www.nuget.org/packages/SatorImaging.TDoubles)
-[![](https://img.shields.io/github/license/sator-imaging/TDoubles)](LICENSE.md)
-[![](https://img.shields.io/badge/.NET-netstandard2.0-blue)](https://dotnet.microsoft.com/)
+[![nuget](https://img.shields.io/nuget/vpre/SatorImaging.TDoubles)](https://www.nuget.org/packages/SatorImaging.TDoubles)
+[![license](https://img.shields.io/github/license/sator-imaging/TDoubles)](LICENSE.md)
+[![build](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml/badge.svg)](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml)
+![netstandard](https://img.shields.io/badge/.NET-netstandard2.0-blue)
 
 
 
 
 
-# Source Generator for Mocking and Unit Testing
+![Hero](./GitHub-SocialPreview.png)
 
 `TDoubles`* is a powerful C# source generator that revolutionizes unit testing by creating mock wrapper classes at compile-time. Instead of relying on complex runtime reflection or proxy generation like traditional mocking frameworks, this generator produces clean, readable C# code during compilation that wraps your target types with customizable behavior.
 
@@ -56,6 +56,23 @@ var realData = mock.GetData(123);
 mock.MockOverrides.SaveData = (data) => Console.WriteLine($"Saved: {data}");
 mock.SaveData(realData);
 ```
+
+
+Implements fake behaviors for debugging purposes in conjunction with latest update to the real implementation.
+
+```cs
+[Mock(typeof(IFoo), nameof(IFoo.Save), nameof(IFoo.Load))]
+partial class FooFake
+{
+    public void Save() => File.WriteAllText("...", JsonUtility.ToJson(this, true));
+    public void Load() => JsonUtility.FromJsonOverwrite(File.ReadAllText("..."), this);
+}
+
+// Delegates to latest ConcreteFoo implementation except for Save and Load
+var fake = new FooFake(new ConcreteFoo());
+```
+
+
 
 
 ## Generic Type Support
@@ -125,12 +142,12 @@ There are options to select generated mock members.
 
 ```cs
 // Include internal types, interfaces and members to mock generation
-[Mock(typeof(SomeClass), IncludeInternals = true)]
-partial class SomeClassMock { }
+[Mock(typeof(Foo), IncludeInternals = true)]
+partial class FooMock { }
 
 // Exclude specified members from mock generation (no error if member is not found)
-[Mock(typeof(SomeClass), "ToString", "Foo", "Bar", IncludeInternals = false)]
-partial class SomeClassMockWithoutToStringOverride
+[Mock(typeof(Foo), "ToString", "Foo", "Bar", IncludeInternals = false)]
+partial class FooMockWithoutToStringOverride
 {
     // You can re-implement excluded 'ToString' as you desired
     public override string ToString() => base.ToString() ?? "<NULL>";
@@ -570,7 +587,6 @@ For comprehensive testing examples with MSTest, NUnit, and performance compariso
 
 ## `record` and `record struct`
 
-- By contrast from `class`, it always inherits from target record even if no `virtual`, `abstract`, or `override` members
 - Always implements `IEquatable<MOCK_TARGET_RECORD>` and `MockOverrides.MockTargetRecord_Equals`
     - Note that it is *NOT* `IEquatable<GENERATED_MOCK>`
 - `bool Equals(object?)` cannot be overridden
@@ -753,7 +769,6 @@ If you discover a security vulnerability, please report it privately by emailing
 
 - Missing Tests
     - `static` class mocking
-    - `ref` return value
     - `sealed` overridden methods
     - `async` tests
     - `event` getter and setter tests
@@ -761,10 +776,12 @@ If you discover a security vulnerability, please report it privately by emailing
     - `readonly record struct` tests
     - `Tuple` and `ValueTuple` tests
     - Property and indexer accessibility tests (e.g., `{ get; private set; }` or etc)
-    - Nested generic type mocking (e.g., `[Mock(typeof(Foo.NestedKeyValueStore<,>))]`)
 - Missing Features
-    - `ref` return type
+    - `ref` return
     - Attribute preservation
+    - Support for nested types (e.g., `[Mock(typeof(Foo.Bar))]`)
+    - Nested generic type mocking (e.g., `[Mock(typeof(Foo.NestedKeyValueStore<,>))]`)
+    - Add proper `<inheritdoc cref="..." />` for mock members
     - Support for `default` and `allows ref struct` type constraint
         - The `default` constraint is valid on override and explicit interface implementation methods only
         - Roslyn update is required while keeping Unity engine support
@@ -778,7 +795,7 @@ If you discover a security vulnerability, please report it privately by emailing
         - Centralize blueprint-to-C# conversion in domain model to make it consistent, robust and maintainable
         - Eliminate duplicate functions, control flows and etc scattered in codebase
 - Optional
-    - New `Mock` attribute option to generate `MockCallCounts` that records the call count of each mock member
+    - ~~New `Mock` attribute option to generate `MockCallCounts` that records the call count of each mock member~~
         - Declare `volatile int` fields
         - Increment count by `Interlocked.Increment(ref ...)` method at the beginning of generated mock class member.
 
