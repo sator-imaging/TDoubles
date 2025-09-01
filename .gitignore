@@ -5,6 +5,7 @@
 **/bin
 **/obj
 
+!.github
 !.gitignore
 
 ![A-Z]*.md
