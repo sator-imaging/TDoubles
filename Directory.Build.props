@@ -14,7 +14,7 @@
     <NuGetPublishCompany>$(NuGetPublishOwner)</NuGetPublishCompany>
     <NuGetPublishCopyright>(c) 2025 $(NuGetPublishOwner)</NuGetPublishCopyright>
     <NuGetPublishLicenseSPDX>MIT</NuGetPublishLicenseSPDX>
-    <NuGetPublishDescription>Incremental source generator for creating mock wrapper classes.</NuGetPublishDescription>
+    <NuGetPublishDescription>C# Source Generator for Strongly-Typed Mocks and Fakes</NuGetPublishDescription>
     <NuGetPublishTags>Unit, Testing, Test, Doubles, Mocking, Roslyn, source generator</NuGetPublishTags>
     <NuGetPublishWebsite>https://x.com/sator_imaging</NuGetPublishWebsite>
     <NuGetPublishRepository>https://github.com/sator-imaging/TDoubles</NuGetPublishRepository>
