@@ -1,13 +1,13 @@
 [![nuget](https://img.shields.io/nuget/vpre/SatorImaging.TDoubles)](https://www.nuget.org/packages/SatorImaging.TDoubles)
-[![license](https://img.shields.io/github/license/sator-imaging/TDoubles)](LICENSE.md)
 [![build](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml/badge.svg)](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml)
-![netstandard](https://img.shields.io/badge/.NET-netstandard2.0-blue)
+
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sator-imaging/TDoubles)
 
 
 
 
 
-![Hero](./GitHub-SocialPreview.png)
+![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
 
 `TDoubles`* is a powerful C# source generator that revolutionizes unit testing by creating mock wrapper classes at compile-time. Instead of relying on complex runtime reflection or proxy generation like traditional mocking frameworks, this generator produces clean, readable C# code during compilation that wraps your target types with customizable behavior.
 
