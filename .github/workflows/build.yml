@@ -30,6 +30,6 @@ jobs:
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"
+            dotnet run --project "$FILE"  -p:Nullable=disable
           fi
         done
