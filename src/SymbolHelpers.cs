@@ -13,6 +13,12 @@ namespace TDoubles
     /// </summary>
     public static class SymbolHelpers
     {
+        public static readonly SymbolDisplayFormat FullyQualifiedNoNullableAnnotationFormat = new SymbolDisplayFormat(
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
+            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+
         /// <summary>
         /// SymbolDisplayFormat for fully qualified names including nullable reference type modifier.
         /// </summary>
@@ -393,6 +399,42 @@ namespace TDoubles
             }
 
             return name;
+        }
+
+        /// <summary>
+        /// Generates a unique key for a symbol to resolve naming conflicts, especially for overloaded methods or properties.
+        /// The key includes the symbol's short name, and for methods/properties, it appends generic type parameters and parameter types.
+        /// </summary>
+        /// <param name="symbol">The symbol (e.g., IMethodSymbol, IPropertySymbol) for which to generate the key.</param>
+        /// <returns>A string representing the conflict resolution key.</returns>
+        public static string GetMemberConflictResolutionKey(ISymbol? symbol)
+        {
+            var key = GetShortNameWithoutTypeArgs(symbol);
+
+            switch (symbol)
+            {
+                case IMethodSymbol method:
+                    {
+                        if (method.IsGenericMethod)
+                        {
+                            var typeParams = string.Join(",", method.TypeParameters.Select(x => x.ToDisplayString(FullyQualifiedNoNullableAnnotationFormat)));
+                            key += $"<{typeParams}>";
+                        }
+
+                        var parameters = string.Join(",", method.Parameters.Select(x => x.Type.ToDisplayString(FullyQualifiedNoNullableAnnotationFormat)));
+                        key += $"({parameters})";
+                    }
+                    break;
+
+                case IPropertySymbol property:
+                    {
+                        var parameters = string.Join(",", property.Parameters.Select(x => x.Type.ToDisplayString(FullyQualifiedNoNullableAnnotationFormat)));
+                        key += $"[{parameters}]";
+                    }
+                    break;
+            }
+
+            return key;//.Replace("?", string.Empty);  // Ignore nullability difference
         }
 
         /// <summary>

@@ -383,7 +383,7 @@ namespace TDoubles
         /// <summary>
         /// Gets the member key for conflict resolution.
         /// </summary>
-        public static string GetResolvedNameKey(UnifiedMemberBlueprint member)
+        public static string GetResolvedNameConflictResolutionKey(UnifiedMemberBlueprint member)
         {
             var signatureBuilder = new StringBuilder();
 

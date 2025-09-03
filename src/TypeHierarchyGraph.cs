@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -260,27 +261,9 @@ namespace TDoubles
                         continue;
                     }
 
-                    // Don't check return type difference
-                    var signature = SymbolHelpers.GetShortNameWithoutTypeArgs(resolvedMember.Member);
+                    var conflictResolutionKey = SymbolHelpers.GetMemberConflictResolutionKey(resolvedMember.Member);
 
-                    switch (resolvedMember.Member)
-                    {
-                        case IMethodSymbol method:
-                            {
-                                var parameters = string.Join(",", method.Parameters.Select(x => x.Type.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)));
-                                signature += $"({parameters})";
-                            }
-                            break;
-
-                        case IPropertySymbol property:
-                            {
-                                var parameters = string.Join(",", property.Parameters.Select(x => x.Type.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)));
-                                signature += $"({parameters})";
-                            }
-                            break;
-                    }
-
-                    var noConflict = overloadConflictMap.Add(signature.Replace("?", string.Empty));  // Ignore nullability difference
+                    var noConflict = overloadConflictMap.Add(conflictResolutionKey);
                     if (!noConflict)
                     {
                         resolvedMember.IsExplicitInterfaceImplementation = true;
