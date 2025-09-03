@@ -644,7 +644,7 @@ partial class Mock<T>
 - `ref` return type
 
 
-## Attribute Not Perserved
+## Attribute Limitations
 
 Attributes on type, method, property or etc are not preserved in generated mock.
 
