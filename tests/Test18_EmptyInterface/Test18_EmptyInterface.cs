@@ -6,7 +6,7 @@ public interface IEmptyInterface
 }
 
 [Mock(typeof(IEmptyInterface))]
-public partial class MockIEmptyInterface
+public partial class MockIEmptyInterface : IEmptyInterface
 {
 }
 

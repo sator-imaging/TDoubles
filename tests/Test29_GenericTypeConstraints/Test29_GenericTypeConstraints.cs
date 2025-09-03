@@ -36,7 +36,7 @@ public class Test29_GenericTypeConstraints
     {
         int exitCode = 0;
 
-        var model = GeneratorValidationModel.Create("tests/Test29_GenericTypeConstraints");
+        var model = GeneratorValidationModel.Create();
         var sources = ValidationHelper.GetGeneratedSources(model);
         foreach (var (hintName, source) in sources)
         {

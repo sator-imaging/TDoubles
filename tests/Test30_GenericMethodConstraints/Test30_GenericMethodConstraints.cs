@@ -55,7 +55,7 @@ public class Test30_GenericMethodConstraints
         var mock = new MockGenericMethodConstraints();
         exitCode += ValidationHelper.ValidateImplementation<GenericMethodConstraints, MockGenericMethodConstraints>(mock);
 
-        var model = GeneratorValidationModel.Create("tests/Test30_GenericMethodConstraints");
+        var model = GeneratorValidationModel.Create();
         var sources = ValidationHelper.GetGeneratedSources(model);
         foreach (var (hintName, source) in sources)
         {

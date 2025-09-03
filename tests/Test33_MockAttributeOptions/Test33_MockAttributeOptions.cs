@@ -87,7 +87,7 @@ public class Test33_MockAttributeOptions
         exitCode += ValidationHelper.ValidateMemberDoesNotExist(mockEmpty, "Equals", "Equals should not be mocked in MockEmpty");
         exitCode += ValidationHelper.ValidateMemberDoesNotExist(mockEmpty, "GetHashCode", "GetHashCode should not be mocked in MockEmpty");
 
-        var model = GeneratorValidationModel.Create("tests/Test33_MockAttributeOptions");
+        var model = GeneratorValidationModel.Create();
         var sources = ValidationHelper.GetGeneratedSources(model);
         foreach (var (hintName, source) in sources)
         {

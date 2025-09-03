@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -21,7 +22,13 @@ namespace TDoubles.Tests.ComprehensiveValidation
             GeneratorTypeName = generatorTypeName ?? throw new ArgumentNullException(nameof(generatorTypeName));
         }
 
-        public static GeneratorValidationModel Create(string projectDirectory)
+        public static GeneratorValidationModel Create([CallerFilePath] string? callerFilePath = null)
+        {
+            string projectDirectory = "tests/" + Path.GetFileNameWithoutExtension(callerFilePath);
+            return CreateCore(projectDirectory);
+        }
+
+        internal static GeneratorValidationModel CreateCore(string projectDirectory)
         {
             string generatorAssemblyPath
 #if DEBUG
@@ -73,7 +80,7 @@ namespace TDoubles.Tests.ComprehensiveValidation
                 return 1;
             }
 
-            var model = GeneratorValidationModel.Create(projectDirectory);
+            var model = GeneratorValidationModel.CreateCore(projectDirectory);
 
             if (!File.Exists(model.GeneratorAssemblyPath))
             {
