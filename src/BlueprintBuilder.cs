@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using TDoubles.DataModels;
 
@@ -46,6 +47,58 @@ namespace TDoubles
             // Build the type hierarchy graph first as it's the single source of truth
             var typeGraph = TypeHierarchyGraph.Build(targetType, includeInternals, compilation);
 
+            // Filter members by short name or declaring type
+            {
+                var resolvedMembers = typeGraph.ResolvedMembers;
+
+                // No worth to perform lazy initialize as it's initialized in almost cases
+                var mockDeclaringMemberKeys = new HashSet<string>(
+                    mockClass
+                        .GetMembers()
+                        .Select(x =>
+                        {
+                            return ExplicitImplAwareConflictResolutionKey(x, SymbolHelpers.GetExplicitInterfaceType(x));
+                        }),
+                    StringComparer.Ordinal);
+
+                // In type graph, naming conflict resolver resolves conflict by marking member as it
+                // should be implemented as explict interface impl. so, here cannot correctly determine
+                // it by ISymbol property. need to determine it by ResolvedMemberInfo property instead.
+                static string ExplicitImplAwareConflictResolutionKey(ISymbol member, ISymbol? explicitImplContainingType)
+                {
+                    return explicitImplContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNoNullableAnnotationFormat)
+                        + SymbolHelpers.GetMemberConflictResolutionKey(member);
+                }
+
+                foreach (var resolved in resolvedMembers.Values.ToImmutableList())
+                {
+                    if (SymbolEqualityComparer.Default.Equals(resolved.Member.ContainingType, mockClass) ||
+                        excludeMemberShortNames.Contains(SymbolHelpers.GetShortNameWithoutTypeArgs(resolved.Member), StringComparer.Ordinal))
+                    {
+                        Debug.Assert(resolvedMembers.Remove(resolved.Member));
+                        continue;
+                    }
+
+                    // Must check after excludeMemberShortNames
+                    if (resolved.Member.ContainingType.SpecialType is SpecialType.System_Object
+                                                                   or SpecialType.System_ValueType)
+                    {
+                        continue;
+                    }
+
+                    var conflictResolutionKey
+                        = ExplicitImplAwareConflictResolutionKey(
+                            resolved.Member,
+                            resolved.IsExplicitInterfaceImplementation ? resolved.InterfaceType : null);
+
+                    if (mockDeclaringMemberKeys.Contains(conflictResolutionKey))
+                    {
+                        Debug.Assert(resolvedMembers.Remove(resolved.Member));
+                        continue;
+                    }
+                }
+            }
+
             // 1. Build generic type mapping
             blueprint.TypeMapping = BuildGenericTypeMapping(mockClass, targetType, mode);
 
@@ -72,12 +125,6 @@ namespace TDoubles
 
             // 9. Set return value strategies
             allMembers = DetermineReturnValueStrategies(allMembers);
-
-            // 10. Remove members based on the name
-            allMembers.RemoveAll(x =>
-            {
-                return excludeMemberShortNames.Contains(BlueprintHelpers.GetOriginalName(x), StringComparer.Ordinal);
-            });
 
             blueprint.Members = allMembers;
 
@@ -183,7 +230,7 @@ namespace TDoubles
                     continue;
                 }
 
-                var unifiedMember = ConvertToUnifiedMember(resolvedMember, resolvedMember.DeclaringType);
+                var unifiedMember = ConvertToUnifiedMember(resolvedMember);
                 if (unifiedMember != null)
                 {
                     // Set additional information from the resolved member
@@ -351,15 +398,14 @@ namespace TDoubles
         /// Converts a ResolvedMemberInfo object into a UnifiedMemberBlueprint.
         /// </summary>
         /// <param name="info">The ResolvedMemberInfo to convert.</param>
-        /// <param name="containingType">The containing type of the member.</param>
         /// <returns>A UnifiedMemberBlueprint, or null if the member type is not supported.</returns>
-        private UnifiedMemberBlueprint? ConvertToUnifiedMember(ResolvedMemberInfo info, ITypeSymbol containingType)
+        private UnifiedMemberBlueprint? ConvertToUnifiedMember(ResolvedMemberInfo info)
         {
             var bp = new UnifiedMemberBlueprint
             {
                 // OriginalName removed - stored in OriginalSymbol property
                 OriginalSymbol = info.Member,
-                ContainingType = containingType,
+                ContainingType = info.DeclaringType,
 
                 AccessibilityLevel = ConvertAccessibility(info.Member.DeclaredAccessibility),
                 IsStatic = info.Member.IsStatic,
@@ -503,7 +549,7 @@ namespace TDoubles
         private List<UnifiedMemberBlueprint> RemoveDuplicateMembers(List<UnifiedMemberBlueprint> members)
         {
             // Group by signature and prioritize type members over interface members
-            var groups = members.GroupBy(m => BlueprintHelpers.GetResolvedNameKey(m));
+            var groups = members.GroupBy(m => BlueprintHelpers.GetResolvedNameConflictResolutionKey(m));
             var result = new HashSet<UnifiedMemberBlueprint>();
 
             foreach (var group in groups)
@@ -514,8 +560,10 @@ namespace TDoubles
                 var preferred = group.FirstOrDefault(m => m.CanBeOverridden)
                                 ?? group.FirstOrDefault(m => !m.IsExplicitInterfaceImplementation &&
                                                               m.ContainingType?.TypeKind != TypeKind.Interface)
+                                ?? group.FirstOrDefault(m => m.ContainingType?.TypeKind != TypeKind.Interface)
                                 ?? group.FirstOrDefault(m => !m.IsExplicitInterfaceImplementation)
-                                ?? group.First();
+                                ?? group.First()
+                                ;
 
                 result.Add(preferred);
             }
