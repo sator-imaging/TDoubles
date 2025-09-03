@@ -26,9 +26,9 @@ namespace TDoubles
         /// </summary>
         public const string IndexerName = "This";
         /// <summary>
-        /// Prefix used for generated delegate types.
+        /// Suffix used for generated delegate types.
         /// </summary>
-        public const string DelegatePrefix = "delegate_";
+        public const string DelegateSuffix = "__d";
         /// <summary>
         /// The name of the unified callback method invoked before a mock call.
         /// </summary>

@@ -1192,7 +1192,7 @@ namespace TDoubles
         /// <returns>The name of the generated delegate.</returns>
         private string GenerateDelegateDeclaration(StringBuilder sb, UnifiedMemberBlueprint method, MockClassBlueprint classBp, string baseName)
         {
-            var delegateName = $"{Constants.DelegatePrefix}{baseName}";
+            var delegateName = $"{baseName}{Constants.DelegateSuffix}";
             var returnType = method.IsVoid ? "void" : BlueprintHelpers.ToOverridePropertyReturnTypeString(method);
             var parameters = string.Join(", ", method.Parameters.Select((p, i) => BlueprintHelpers.ToParameterDeclarationString(method, i, BlueprintHelpers.ToOverridePropertyParameterTypeString(method, i))));
 
