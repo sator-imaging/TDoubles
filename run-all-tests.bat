@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 set BASE_DIR=%CD%
 
-dotnet build src  1>nul
+dotnet build src
 
 for /r tests %%i in (Test*.csproj) do (
     if EXIST "%%i" (
