@@ -5,6 +5,13 @@
 
 ![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
 
+[🇺🇸 English](./README.md)
+&nbsp; ❘ &nbsp;
+[🇯🇵 日本語版](./README.ja.md)
+&nbsp; ❘ &nbsp;
+[🇨🇳 简体中文版](./README.zh-CN.md)
+
+
 `TDoubles`* は、コンパイル時にモックラッパークラスを作成することで単体テストに革命をもたらす強力な C# ソースジェネレーターです。従来のモックフレームワークのように複雑なランタイムリフレクションやプロキシ生成に依存するのではなく、このジェネレーターはコンパイル中にクリーンで読みやすい C# コードを生成し、カスタマイズ可能な動作でターゲット型をラップします。
 
 <i>* **T** <sup>Test / Type-Safety</sup> Doubles</i>
