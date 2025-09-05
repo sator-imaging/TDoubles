@@ -3,14 +3,14 @@
 &nbsp;
 [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sator-imaging/TDoubles)
 
-![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
-
 [🇺🇸 English](./README.md)
 &nbsp; ❘ &nbsp;
 [🇯🇵 日本語版](./README.ja.md)
 &nbsp; ❘ &nbsp;
 [🇨🇳 简体中文版](./README.zh-CN.md)
 
+
+![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
 
 `TDoubles`* 是一个强大的 C# 源生成器，通过在编译时创建模拟包装类来彻底改变单元测试。该生成器在编译期间生成清晰、可读的 C# 代码，用可定制的行为包装您的目标类型，而不是像传统模拟框架那样依赖复杂的运行时反射或代理生成。
 
