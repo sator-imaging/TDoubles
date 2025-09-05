@@ -1,5 +1,3 @@
-好的，这是您提供的文本的简体中文翻译：
-
 [![nuget](https://img.shields.io/nuget/vpre/SatorImaging.TDoubles)](https://www.nuget.org/packages/SatorImaging.TDoubles)
 [![build](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml/badge.svg)](https://github.com/sator-imaging/TDoubles/actions/workflows/build.yml)
 &nbsp;
