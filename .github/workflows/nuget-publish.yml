@@ -21,16 +21,16 @@ jobs:
         #       delete resulting, incomplete .nupkg file. then, build again by `dotnet pack` to
         #       create valid package file.
         cd src
-        dotnet build  -c Release  -p:ContinuousIntegrationBuild=true
+        dotnet build  -c Release -p:ContinuousIntegrationBuild=true
         rm -f bin/Release/*.nupkg
-        dotnet pack   -c Release
+        dotnet pack   -c Release -p:ContinuousIntegrationBuild=true
 
     - name: Test (release)
       run: |
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"  -c Release -p:Nullable=disable -p:ContinuousIntegrationBuild=true
+            dotnet run --project "$FILE"  -c Release -p:ContinuousIntegrationBuild=true -p:Nullable=disable
           fi
         done
 
