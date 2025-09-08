@@ -363,7 +363,7 @@ namespace TDoubles
                 var nullableSuffix = bp.IsRecordStruct ? string.Empty : "?";
 
                 sb.AppendLine("            /// <summary>");
-                sb.AppendLine("            /// Override for auto implemented record method.");
+                sb.AppendLine("            /// Override for compiler-generated record method.");
                 sb.AppendLine("            /// </summary>");
                 sb.AppendLine($"            public {Constants.FuncFullName}<{mockTargetType}{nullableSuffix}, bool>? {Constants.RecordIEquatableEqualsOverrideName} {{ get; set; }}");
             }
@@ -1139,7 +1139,7 @@ namespace TDoubles
                 var delegateName = GenerateDelegateDeclaration(sb, method, classBp, overridePropName);
 
                 sb.AppendLine($"            /// <summary>");
-                sb.AppendLine($"            /// Override for {BlueprintHelpers.GetOriginalName(method)} method: <c>{fullSignature}</c>");
+                sb.AppendLine($"            /// Override for {method.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(method)} method:<br/><c>&nbsp; {fullSignature}</c>");
                 sb.AppendLine($"            /// </summary>");
                 sb.AppendLine($"            public {delegateName}? {overridePropName} {{ get; set; }}");
                 sb.AppendLine();
@@ -1159,7 +1159,7 @@ namespace TDoubles
                         : Constants.ActionFullName;
 
                     sb.AppendLine($"            /// <summary>");
-                    sb.AppendLine($"            /// Override for {BlueprintHelpers.GetOriginalName(method)} method: <c>{fullSignature}</c>");
+                    sb.AppendLine($"            /// Override for {method.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(method)} method:<br/><c>&nbsp; {fullSignature}</c>");
                     sb.AppendLine($"            /// </summary>");
                     sb.AppendLine($"            public {modifier}{actionType}? {overridePropName} {{ get; set; }}");
                     sb.AppendLine();
@@ -1173,7 +1173,7 @@ namespace TDoubles
                     var funcType = $"{Constants.FuncFullName}<{string.Join(", ", allTypes)}>";
 
                     sb.AppendLine($"            /// <summary>");
-                    sb.AppendLine($"            /// Override for {BlueprintHelpers.GetOriginalName(method)} method: <c>{fullSignature}</c>");
+                    sb.AppendLine($"            /// Override for {method.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(method)} method:<br/><c>&nbsp; {fullSignature}</c>");
                     sb.AppendLine($"            /// </summary>");
                     sb.AppendLine($"            public {modifier}{funcType}? {overridePropName} {{ get; set; }}");
                     sb.AppendLine();
@@ -1218,7 +1218,7 @@ namespace TDoubles
             {
                 var getterSignature = GenerateFullPropertyGetterSignature(property);
                 sb.AppendLine($"            /// <summary>");
-                sb.AppendLine($"            /// Override for {BlueprintHelpers.GetOriginalName(property)} property getter: <c>{getterSignature}</c>");
+                sb.AppendLine($"            /// Override for {property.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(property)} property getter:<br/><c>&nbsp; {getterSignature}</c>");
                 sb.AppendLine($"            /// </summary>");
                 sb.AppendLine($"            public {Constants.FuncFullName}<{returnType}>? {BlueprintHelpers.GetResolvedName(property, classBp)}{Constants.GetterSuffix} {{ get; set; }}");
                 sb.AppendLine();
@@ -1229,7 +1229,7 @@ namespace TDoubles
             {
                 var setterSignature = GenerateFullPropertySetterSignature(property);
                 sb.AppendLine($"            /// <summary>");
-                sb.AppendLine($"            /// Override for {BlueprintHelpers.GetOriginalName(property)} property setter: <c>{setterSignature}</c>");
+                sb.AppendLine($"            /// Override for {property.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(property)} property setter:<br/><c>&nbsp; {setterSignature}</c>");
                 sb.AppendLine($"            /// </summary>");
                 sb.AppendLine($"            public {Constants.ActionFullName}<{returnType}>? {BlueprintHelpers.GetResolvedName(property, classBp)}{Constants.SetterSuffix} {{ get; set; }}");
                 sb.AppendLine();
@@ -1256,7 +1256,7 @@ namespace TDoubles
                 var getterSignature = GenerateFullIndexerGetterSignature(indexer);
 
                 sb.AppendLine($"            /// <summary>");
-                sb.AppendLine($"            /// Override for indexer getter: <c>{getterSignature}</c>");
+                sb.AppendLine($"            /// Override for {indexer.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)} indexer getter:<br/><c>&nbsp; {getterSignature}</c>");
                 sb.AppendLine($"            /// </summary>");
                 sb.AppendLine($"            public {getterFuncType}? {BlueprintHelpers.GetResolvedName(indexer, classBp)}{Constants.GetterSuffix} {{ get; set; }}");
                 sb.AppendLine();
@@ -1270,7 +1270,7 @@ namespace TDoubles
                 var setterSignature = GenerateFullIndexerSetterSignature(indexer);
 
                 sb.AppendLine($"            /// <summary>");
-                sb.AppendLine($"            /// Override for indexer setter: <c>{setterSignature}</c>");
+                sb.AppendLine($"            /// Override for {indexer.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)} indexer setter:<br/><c>&nbsp; {setterSignature}</c>");
                 sb.AppendLine($"            /// </summary>");
                 sb.AppendLine($"            public {setterActionType}? {BlueprintHelpers.GetResolvedName(indexer, classBp)}{Constants.SetterSuffix} {{ get; set; }}");
                 sb.AppendLine();
@@ -1289,7 +1289,7 @@ namespace TDoubles
             var resolved = BlueprintHelpers.GetResolvedName(eventBp, classBp);
             var eventType = BlueprintHelpers.ToReturnTypeString(eventBp);
             sb.AppendLine($"            /// <summary>");
-            sb.AppendLine($"            /// Overrides for {BlueprintHelpers.GetOriginalName(eventBp)} event add/remove: <c>{eventSignature}</c>");
+            sb.AppendLine($"            /// Overrides for {eventBp.ContainingType?.ToDisplayString(SymbolHelpers.FullyQualifiedNullableFormat)}.{BlueprintHelpers.GetOriginalName(eventBp)} event add/remove:<br/><c>&nbsp; {eventSignature}</c>");
             sb.AppendLine($"            /// </summary>");
             sb.AppendLine($"            public {Constants.ActionFullName}<{eventType}>? {resolved}{Constants.AdderSuffix} {{ get; set; }}");
             sb.AppendLine($"            public {Constants.ActionFullName}<{eventType}>? {resolved}{Constants.RemoverSuffix} {{ get; set; }}");
