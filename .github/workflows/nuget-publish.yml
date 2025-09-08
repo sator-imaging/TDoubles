@@ -30,7 +30,7 @@ jobs:
         for FILE in tests/**/Test*.csproj; do
           if [ -f "$FILE" ]; then
             echo "Testing: $FILE"
-            dotnet run --project "$FILE"  -c Release -p:ContinuousIntegrationBuild=true -p:Nullable=disable
+            dotnet run --project "$FILE"  -c Release -p:ContinuousIntegrationBuild=true
           fi
         done
 
