@@ -37,30 +37,21 @@ public class Test29_GenericTypeConstraints
         int exitCode = 0;
 
         var model = GeneratorValidationModel.Create();
-        var sources = ValidationHelper.GetGeneratedSources(model);
-        foreach (var (hintName, source) in sources)
-        {
-            Console.WriteLine($"------- {hintName} -------");
 
-            if (hintName.StartsWith("MockGenericTypeConstraints", StringComparison.Ordinal))
-            {
-                // Console.WriteLine(source);
-
-                exitCode += ValidationHelper.ValidateContains(source, "where X1 : struct");
-                exitCode += ValidationHelper.ValidateContains(source, "where X2 : class");
-                exitCode += ValidationHelper.ValidateContains(source, "where X3 : class?");
-                exitCode += ValidationHelper.ValidateContains(source, "where X4 : notnull");
-                exitCode += ValidationHelper.ValidateContains(source, "where X5 : unmanaged");
-                exitCode += ValidationHelper.ValidateContains(source, "where X6 : new()");
-                exitCode += ValidationHelper.ValidateContains(source, "where X7 : global::Foo");
-                exitCode += ValidationHelper.ValidateContains(source, "where X8 : global::Foo?");
-                exitCode += ValidationHelper.ValidateContains(source, "where X9 : global::IBar");
-                exitCode += ValidationHelper.ValidateContains(source, "where Y1 : global::IBar?");
-                exitCode += ValidationHelper.ValidateContains(source, "where Y2 : Y3?");
-                exitCode += ValidationHelper.ValidateContains(source, "where Y4 : Y5");
-                exitCode += ValidationHelper.ValidateContains(source, "where Y5 : global::Baz, global::IBar?, global::IQux?, global::System.Collections.Generic.IEnumerable<X1>, new()");
-            }
-        }
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockGenericTypeConstraints", out var source);
+        exitCode += ValidationHelper.ValidateContains(source, "where X1 : struct");
+        exitCode += ValidationHelper.ValidateContains(source, "where X2 : class");
+        exitCode += ValidationHelper.ValidateContains(source, "where X3 : class?");
+        exitCode += ValidationHelper.ValidateContains(source, "where X4 : notnull");
+        exitCode += ValidationHelper.ValidateContains(source, "where X5 : unmanaged");
+        exitCode += ValidationHelper.ValidateContains(source, "where X6 : new()");
+        exitCode += ValidationHelper.ValidateContains(source, "where X7 : global::Foo");
+        exitCode += ValidationHelper.ValidateContains(source, "where X8 : global::Foo?");
+        exitCode += ValidationHelper.ValidateContains(source, "where X9 : global::IBar");
+        exitCode += ValidationHelper.ValidateContains(source, "where Y1 : global::IBar?");
+        exitCode += ValidationHelper.ValidateContains(source, "where Y2 : Y3?");
+        exitCode += ValidationHelper.ValidateContains(source, "where Y4 : Y5");
+        exitCode += ValidationHelper.ValidateContains(source, "where Y5 : global::Baz, global::IBar?, global::IQux?, global::System.Collections.Generic.IEnumerable<X1>, new()");
 
         return exitCode;
     }

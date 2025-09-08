@@ -52,24 +52,15 @@ public class Test36_MockDeclaringMemberExclusion
         // exitCode += ValidationHelper.ValidateMemberDoesNotExist(mock, "Item", "Item(indexer) should not be mocked in MockDeclaringMemberExclusion");
 
         var model = GeneratorValidationModel.Create();
-        var sources = ValidationHelper.GetGeneratedSources(model);
-        foreach (var (hintName, source) in sources)
-        {
-            Console.WriteLine($"------- {hintName} -------");
-
-            if (hintName.StartsWith("MockDeclaringMemberExclusion", StringComparison.Ordinal))
-            {
-                // Console.WriteLine(source);
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " IMockMethod(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " IOtherMethod(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " IOther.ExplicitInterfaceImpl(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " ExplicitInterfaceImpl(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " ThisMethodMustNotBeMocked(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " ThisPropertyMustNotBeMocked");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " this");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " new void OnWillMockCall(");
-            }
-        }
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockDeclaringMemberExclusion", out var source);
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " IMockMethod(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " IOtherMethod(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " IOther.ExplicitInterfaceImpl(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " ExplicitInterfaceImpl(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " ThisMethodMustNotBeMocked(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " ThisPropertyMustNotBeMocked");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " this");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " new void OnWillMockCall(");
 
         return exitCode;
     }

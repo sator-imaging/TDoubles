@@ -655,7 +655,7 @@ namespace TDoubles.Tests.ComprehensiveValidation
         /// <param name="model">The generator validation model.</param>
         /// <returns>A dictionary where the key is the file name and the value is the generated source code.</returns>
         /// <exception cref="InvalidOperationException">Thrown if the generator assembly or type cannot be loaded.</exception>
-        public static Dictionary<string, string> GetGeneratedSources(GeneratorValidationModel model)
+        private static Dictionary<string, string> GetGeneratedSources(GeneratorValidationModel model)
         {
             if (model is null) throw new ArgumentNullException(nameof(model));
 
@@ -677,6 +677,45 @@ namespace TDoubles.Tests.ComprehensiveValidation
             }
 
             return generatedSources;
+        }
+
+        /// <summary>
+        /// Runs the source generator against a project and returns the content of a single generated source file
+        /// whose HintName starts with the specified text.
+        /// </summary>
+        /// <param name="model">The generator validation model.</param>
+        /// <param name="hintNameStart">The starting text of the HintName to search for.</param>
+        /// <param name="generatedSource">The content of the matching generated source file, if found.</param>
+        /// <returns>0 if a single matching source is found, 1 otherwise.</returns>
+        public static int GetGeneratedSource(GeneratorValidationModel model, string hintNameStart, out string generatedSource)
+        {
+            generatedSource = string.Empty;
+            try
+            {
+                var generatedSources = GetGeneratedSources(model);
+                var matchingSources = generatedSources.Where(s => s.Key.StartsWith(hintNameStart, StringComparison.Ordinal)).ToList();
+
+                if (matchingSources.Count > 1)
+                {
+                    LogFail($"GetGeneratedSource: Multiple generated sources found starting with '{hintNameStart}'. Matching sources: {string.Join(", ", matchingSources.Select(s => s.Key))}");
+                    return 1;
+                }
+
+                if (matchingSources.Count == 1)
+                {
+                    generatedSource = matchingSources.Single().Value;
+                    LogPass($"GetGeneratedSource: Found single generated source starting with '{hintNameStart}'.");
+                    return 0;
+                }
+
+                LogFail($"GetGeneratedSource: No generated source found starting with '{hintNameStart}'. Available sources: {string.Join(", ", generatedSources.Keys)}");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LogFail($"GetGeneratedSource threw {ex.GetType().Name}: {ex.Message}");
+                return 1;
+            }
         }
 
         private static IIncrementalGenerator LoadGenerator(GeneratorValidationModel model)

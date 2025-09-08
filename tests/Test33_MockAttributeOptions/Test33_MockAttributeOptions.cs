@@ -20,13 +20,13 @@ partial class MockAllMembers { }
 
 
 [Mock(typeof(PublicAndInternalMembers), "__STMG_A", "__STMG_B", "__STMG_C")]
-partial class MockWithExcludeNamesStmg { }
+partial class MockWithExcludeNamesStmg { public void __STMG_A() { } }
 
 [Mock(typeof(PublicAndInternalMembers), new[] { "__FOO_A", "__FOO_B" }, IncludeInternals = false)]
-partial class MockWithExcludeNamesFoo { }
+partial class MockWithExcludeNamesFoo { public void __FOO_A() { } }
 
 [Mock(typeof(PublicAndInternalMembers), new string[] { "__BAR_A" }, IncludeInternals = false)]
-partial class MockWithExcludeNamesBar { }
+partial class MockWithExcludeNamesBar { public void __BAR_A() { } }
 
 [Mock(typeof(PublicAndInternalMembers), new string[0], IncludeInternals = false)]
 partial class MockWithExcludeNamesNothing { }
@@ -34,9 +34,10 @@ partial class MockWithExcludeNamesNothing { }
 
 public class Empty { }
 
-[Mock(typeof(Empty), "ToString", "Equals", "GetHashCode")]
+[Mock(typeof(Empty), "TestMethod", "ToString", "Equals", "GetHashCode")]
 partial class MockEmpty
 {
+    public void TestMethod() { }
 }
 
 public class Test33_MockAttributeOptions
@@ -88,36 +89,33 @@ public class Test33_MockAttributeOptions
         exitCode += ValidationHelper.ValidateMemberDoesNotExist(mockEmpty, "GetHashCode", "GetHashCode should not be mocked in MockEmpty");
 
         var model = GeneratorValidationModel.Create();
-        var sources = ValidationHelper.GetGeneratedSources(model);
-        foreach (var (hintName, source) in sources)
+        string source;
+
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockWithExcludeNamesStmg", out source);
+        exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__STMG_A', '__STMG_B', '__STMG_C'");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " __STMG_A(");
+
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockWithExcludeNamesFoo", out source);
+        exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__FOO_A', '__FOO_B'");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " __FOO_A(");
+
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockWithExcludeNamesBar", out source);
+        exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__BAR_A'");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " __BAR_A(");
+
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockWithExcludeNamesNothing", out source);
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, "/// Excluded members:");
+
+        exitCode += ValidationHelper.GetGeneratedSource(model, "MockEmpty", out source);
+        exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: 'TestMethod', 'ToString', 'Equals', 'GetHashCode'");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " ToString(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " Equals(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " GetHashCode(");
+        exitCode += ValidationHelper.ValidateDoesNotContain(source, " TestMethod(");
+
+        if (exitCode != 0)
         {
-            Console.WriteLine($"------- {hintName} -------");
-            // Console.WriteLine(source);
-
-            if (hintName.StartsWith("MockWithExcludeNamesStmg", StringComparison.Ordinal))
-            {
-                exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__STMG_A', '__STMG_B', '__STMG_C'");
-            }
-            if (hintName.StartsWith("MockWithExcludeNamesFoo", StringComparison.Ordinal))
-            {
-                exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__FOO_A', '__FOO_B'");
-            }
-            if (hintName.StartsWith("MockWithExcludeNamesBar", StringComparison.Ordinal))
-            {
-                exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: '__BAR_A'");
-            }
-            if (hintName.StartsWith("MockWithExcludeNamesNothing", StringComparison.Ordinal))
-            {
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, "/// Excluded members:");
-            }
-            if (hintName.StartsWith("MockEmpty", StringComparison.Ordinal))
-            {
-                exitCode += ValidationHelper.ValidateContains(source, "/// Excluded members: 'ToString', 'Equals', 'GetHashCode'");
-
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " ToString(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " Equals(");
-                exitCode += ValidationHelper.ValidateDoesNotContain(source, " GetHashCode(");
-            }
+            Console.WriteLine(source);
         }
 
         return exitCode;
