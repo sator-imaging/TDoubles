@@ -70,30 +70,32 @@ namespace TDoubles
                         + SymbolHelpers.GetMemberConflictResolutionKey(member);
                 }
 
-                foreach (var resolved in resolvedMembers.Values.ToImmutableList())
+                foreach (var resolved in resolvedMembers.ToImmutableList())
                 {
-                    if (SymbolEqualityComparer.Default.Equals(resolved.Member.ContainingType, mockClass) ||
-                        excludeMemberShortNames.Contains(SymbolHelpers.GetShortNameWithoutTypeArgs(resolved.Member), StringComparer.Ordinal))
+                    if (SymbolEqualityComparer.Default.Equals(resolved.Value.Member.ContainingType, mockClass) ||
+                        excludeMemberShortNames.Contains(SymbolHelpers.GetShortNameWithoutTypeArgs(resolved.Value.Member), StringComparer.Ordinal))
                     {
-                        Debug.Assert(resolvedMembers.Remove(resolved.Member));
+                        bool hasRemoved = resolvedMembers.Remove(resolved.Key);
+                        Debug.Assert(hasRemoved);
                         continue;
                     }
 
                     // Must check after excludeMemberShortNames
-                    if (resolved.Member.ContainingType.SpecialType is SpecialType.System_Object
-                                                                   or SpecialType.System_ValueType)
+                    if (resolved.Value.Member.ContainingType.SpecialType is SpecialType.System_Object
+                                                                         or SpecialType.System_ValueType)
                     {
                         continue;
                     }
 
                     var conflictResolutionKey
                         = ExplicitImplAwareConflictResolutionKey(
-                            resolved.Member,
-                            resolved.IsExplicitInterfaceImplementation ? resolved.InterfaceType : null);
+                            resolved.Value.Member,
+                            resolved.Value.IsExplicitInterfaceImplementation ? resolved.Value.InterfaceType : null);
 
                     if (mockDeclaringMemberKeys.Contains(conflictResolutionKey))
                     {
-                        Debug.Assert(resolvedMembers.Remove(resolved.Member));
+                        bool hasRemoved = resolvedMembers.Remove(resolved.Key);
+                        Debug.Assert(hasRemoved);
                         continue;
                     }
                 }
