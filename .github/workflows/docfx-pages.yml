@@ -51,6 +51,7 @@ jobs:
         run: |
           rm -rf ./debug
           rm -rf ./tests
+          rm -rf ./sandbox
 
 
       ######  main  ######
