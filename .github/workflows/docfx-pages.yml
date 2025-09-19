@@ -47,6 +47,10 @@ jobs:
       # after checkout, you can checkout another repo, copy logo image or
       # other assets into '.docfx' folder to setup your own docfx environment.
       # note that images must be copied into '.docfx/images', 'images' or '.images'.
+      - name: Ignore debug/ and tests/
+        run: |
+          rm -rf ./debug
+          rm -rf ./tests
 
 
       ######  main  ######
