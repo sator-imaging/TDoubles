@@ -47,6 +47,11 @@ jobs:
       # after checkout, you can checkout another repo, copy logo image or
       # other assets into '.docfx' folder to setup your own docfx environment.
       # note that images must be copied into '.docfx/images', 'images' or '.images'.
+      - name: Icon setup
+        run: |
+          mkdir -p .docfx/images
+          cp icon-128px.png .docfx/images
+
       - name: Ignore debug/ and tests/
         run: |
           rm -rf ./debug
@@ -73,8 +78,8 @@ jobs:
 
           # paths must be relative from .docfx folder. default value is used when not set.
           # note that url works but only in top page. see sample website for detail.
-          ###site_logo:    '<logo>.svg'
-          ###site_favicon: '<favicon>.svg'
+          site_logo:    'images/icon-128px.png'
+          site_favicon: 'images/icon-128px.png'
 
           # advanced options
           # --> https://dotnet.github.io/docfx/docs/template.html?tabs=modern#custom-template
