@@ -27,7 +27,7 @@ namespace TDoubles
     /// The source generator will create a mock implementation that delegates to the target type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
-    internal class MockAttribute : Attribute
+    internal sealed class MockAttribute : Attribute
     {
         /// <summary>
         /// Gets the target type to be mocked.
