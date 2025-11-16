@@ -13,12 +13,29 @@
 
 
 
-![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
+![Hero](https://raw.githubusercontent.com/sator-imaging/TDoubles/main/GitHub-SocialPreview.png)
 
-`TDoubles`* is a powerful C# source generator that revolutionizes unit testing by creating mock wrapper classes at compile-time. Instead of relying on complex runtime reflection or proxy generation like traditional mocking frameworks, this generator produces clean, readable C# code during compilation that wraps your target types with customizable behavior.
+`TDoubles` is a powerful C# source generator that revolutionizes unit testing by creating mock wrapper classes at compile-time. Instead of relying on complex runtime reflection or proxy generation like traditional mocking frameworks, this generator produces clean, readable C# code during compilation that wraps your target types with customizable behavior.
 
-<i>* **T** <sup>Test / Type-Safety</sup> Doubles</i>
 
+
+## ✨ Comparison with Traditional Mocking Frameworks
+
+| Feature | TDoubles | Traditional Frameworks (Moq, NSubstitute) |
+|---------|---------------------------|-------------------------------------------|
+| **Performance** | Zero runtime overhead, compile-time generation | Runtime reflection and proxy creation |
+| **Type Safety** | Full compile-time checking and IntelliSense | Runtime configuration, limited IntelliSense |
+| **Generic Support** | Full support including constraints | Limited generic type support |
+| **Setup Complexity** | Single attribute, minimal configuration | Complex fluent APIs and setup expressions |
+| **Debugging** | Generated code is readable and debuggable | Proxy objects can be difficult to debug |
+
+
+
+
+
+# ⚡ Quick Start
+
+Apply the `[Mock]` attribute to a partial class, and the generator handles the rest.
 
 ```cs
 using TDoubles;
@@ -29,7 +46,7 @@ public interface IDataService
     void SaveData(string data);
 }
 
-[Mock(typeof(IDataService))]
+[Mock(typeof(IDataService))]   // 👈
 partial class DataServiceMock
 {
     // Implementation will be generated automatically
@@ -45,6 +62,7 @@ var mockService = new DataServiceMock();
 
 // Override behavior for testing
 mockService.MockOverrides.GetData = (id) => $"MockData_{id}";
+//          ~~~~~~~~~~~~~
 
 string mockData = mockService.GetData(123); // Returns "MockData_123"
 ```
@@ -190,20 +208,6 @@ TDoubles generator excels in scenarios where you need:
 - **Record and Struct Mocking**: Testing value types and immutable records that traditional frameworks struggle with
 - **Complex Generic Testing**: Mocking generic types with multiple type parameters and constraints
 - **Internal API Testing**: Testing internal members without making them public
-
-
-## Comparison with Traditional Mocking Frameworks
-
-| Feature | TDoubles | Traditional Frameworks (Moq, NSubstitute) |
-|---------|---------------------------|-------------------------------------------|
-| **Performance** | Zero runtime overhead, compile-time generation | Runtime reflection and proxy creation |
-| **Type Safety** | Full compile-time checking and IntelliSense | Runtime configuration, limited IntelliSense |
-| **Supported Types** | Classes, interfaces, records, structs, static classes | Primarily interfaces and virtual members |
-| **Setup Complexity** | Single attribute, minimal configuration | Complex fluent APIs and setup expressions |
-| **Debugging** | Generated code is readable and debuggable | Proxy objects can be difficult to debug |
-| **Generic Support** | Full support including constraints | Limited generic type support |
-| **Static Methods** | Converts to testable instance methods | Requires wrapper interfaces or special tools |
-| **Value Types** | Native support for structs and records | Not supported or requires boxing |
 
 
 ## How It Works
