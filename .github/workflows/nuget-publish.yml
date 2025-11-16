@@ -4,6 +4,10 @@ on:
 jobs:
   publish:
 
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
+      contents: read   # required for private repo
+
     runs-on: ubuntu-latest
 
     steps:
@@ -36,10 +40,16 @@ jobs:
 
     ################################
     #  NUGET
+    - name: Trusted Publishing (id-token permission required)
+      uses: NuGet/login@v1
+      id: login  # --> ${{ steps.login.outputs.NUGET_API_KEY }}
+      with:
+        user: ${{ secrets.NUGET_LOGIN }}
+
     - name: NuGet Publish
       run: |
         cd src
         dotnet nuget push "bin/Release/*.nupkg"  \
-          -k ${{ secrets.NUGET_API_KEY }}  \
+          -k ${{ steps.login.outputs.NUGET_API_KEY }}  \
           -s https://api.nuget.org/v3/index.json \
           --timeout 60
