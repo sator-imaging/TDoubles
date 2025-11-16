@@ -3,4 +3,5 @@
     <File Path=".editorconfig" />
   </Folder>
   <Project Path="src/TDoubles.csproj" />
+  <Project Path="sandbox/TDoubles.Sandbox.csproj" />
 </Solution>

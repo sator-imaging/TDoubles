@@ -1,3 +1,6 @@
+//#define __sandbox
+#if __sandbox
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +45,7 @@ namespace TDoubles.Sandbox
     [Mock(typeof(IList<int>))] internal partial class MockIListInt { }
 
 
-    [Mock(typeof(MockUnifiedCallback), "", "", "", IncludeInternals = true)]
+    [Mock(typeof(IUnifiedCallback), "", "", "", IncludeInternals = true)]
     partial class MockAttributeTest { }
 
     public interface IUnifiedCallback
@@ -74,20 +77,26 @@ namespace TDoubles.Sandbox
     }
 
 
-    interface IService
+    [Mock(typeof(IService<>))]
+    partial class ServiceMock<TInput>
+    { }
+
+    public interface IService<T>
     {
-        int GetUserId();
-        A GetValue<A>();
-        void DoSomething();
-    }
-    interface IService<T>
-    {
-        int GetUserId();
-        T GetValue();
-        void DoSomething();
+        int GetUserId(T input);
     }
 
-    [Mock(typeof(IService))] partial class MockIService { }
-    [Mock(typeof(IService<>))] partial class MockIService<A> { }
-    [Mock(typeof(IService<int>))] partial class MockIServiceInt { }
+    class Program
+    {
+        public void Test()
+        {
+            var mock = new ServiceMock<string>();
+            mock.GetUserId("TDoubles");  // Returns 0
+
+            mock.MockOverrides.GetUserId = (input) => 310;
+            mock.GetUserId("TDoubles");  // Returns 310
+        }
+    }
 }
+
+#endif
