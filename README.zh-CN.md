@@ -10,11 +10,23 @@
 [🇨🇳 简体中文版](./README.zh-CN.md)
 
 
-![Hero](https://github.com/sator-imaging/TDoubles/raw/main/GitHub-SocialPreview.png)
+![Hero](https://raw.githubusercontent.com/sator-imaging/TDoubles/main/GitHub-SocialPreview.png)
 
-`TDoubles`* 是一个强大的 C# 源生成器，通过在编译时创建模拟包装类来彻底改变单元测试。该生成器在编译期间生成清晰、可读的 C# 代码，用可定制的行为包装您的目标类型，而不是像传统模拟框架那样依赖复杂的运行时反射或代理生成。
+`TDoubles` 是一个强大的 C# 源生成器，通过在编译时创建模拟包装类来彻底改变单元测试。该生成器在编译期间生成清晰、可读的 C# 代码，用可定制的行为包装您的目标类型，而不是像传统模拟框架那样依赖复杂的运行时反射或代理生成。
 
-<i>* **T** <sup>测试 / 类型安全</sup> Doubles</i>
+## ✨ 与传统模拟框架的比较
+
+| 特性 | TDoubles | 传统框架 (Moq, NSubstitute) |
+|---------|---------------------------|-------------------------------------------|
+| **性能** | 零运行时开销，编译时生成 | 运行时反射和代理创建 |
+| **类型安全** | 完整的编译时检查和 IntelliSense | 运行时配置，有限的 IntelliSense |
+| **泛型支持** | 包含约束的完整支持 | 有限的泛型类型支持 |
+| **设置复杂性** | 单个属性，最少配置 | 复杂的流式 API 和配置表达式 |
+| **调试** | 生成的代码可读且易于调试 | 代理对象可能难以调试 |
+
+# ⚡ 快速上手
+
+只需将 `[Mock]` 属性应用到部分类，其余工作交给生成器处理。
 
 ```cs
 using TDoubles;
@@ -25,7 +37,7 @@ public interface IDataService
     void SaveData(string data);
 }
 
-[Mock(typeof(IDataService))]
+[Mock(typeof(IDataService))]   // 👈
 partial class DataServiceMock
 {
     // 实现将自动生成
@@ -40,6 +52,7 @@ var mockService = new DataServiceMock();
 
 // 覆盖测试行为
 mockService.MockOverrides.GetData = (id) => $"MockData_{id}";
+//          ~~~~~~~~~~~~~
 
 string mockData = mockService.GetData(123); // 返回 "MockData_123"
 ```
@@ -172,19 +185,6 @@ TDoubles 生成器在以下场景中表现出色：
 - **记录和结构模拟**：测试传统框架难以处理的值类型和不可变记录
 - **复杂泛型测试**：模拟具有多个类型参数和约束的泛型类型
 - **内部 API 测试**：测试内部成员而不将其公开
-
-## 与传统模拟框架的比较
-
-| 特性 | TDoubles | 传统框架 (Moq, NSubstitute) |
-|-----------|---------------------------|-------------------------------------------|
-| **性能** | 零运行时开销，编译时生成 | 运行时反射和代理创建 |
-| **类型安全** | 完全编译时检查和 IntelliSense | 运行时配置，有限的 IntelliSense |
-| **支持的类型** | 类、接口、记录、结构、静态类 | 主要为接口和虚成员 |
-| **设置复杂性** | 单个属性，最少配置 | 复杂的流式 API 和设置表达式 |
-| **调试** | 生成的代码可读且可调试 | 代理对象可能难以调试 |
-| **泛型支持** | 完全支持，包括约束 | 有限的泛型类型支持 |
-| **静态方法** | 转换为可测试的实例方法 | 需要包装器接口或特殊工具 |
-| **值类型** | 本机支持结构和记录 | 不支持或需要装箱 |
 
 ## 工作原理
 
