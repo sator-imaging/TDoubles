@@ -14,8 +14,11 @@ public interface IComplexParameters
     string ArrayMethod(string[] array);
     T GenericMethod<T>(List<T> list);
     void CustomMethod(CustomClass custom);
+    T OverloadMethod<T>(IEnumerable<T> items);
+    T OverloadMethod<T>(List<T> items);
 }
 
+// Test for complex parameter types including generics
 [Mock(typeof(IComplexParameters))]
 public partial class MockComplexParameters
 {
@@ -37,7 +40,13 @@ public class Test12_ComplexParameterTypes
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => m.CustomMethod(new CustomClass { Value = "test" }), "invoke CustomMethod(CustomClass)");
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.ToString(), "invoke ToString()");
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.GetHashCode(), "invoke GetHashCode()");
-        exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.Equals(new object()), "invoke Equals(object)");
+        exitCode += ValidationHelper.ValidateThrows(mock, m => _ = m.OverloadMethod<int>(new List<int> { 1, 2, 3 }), "TDoubles.TDoublesException", "OverloadMethod");
+
+        mock.MockOverrides.OverloadMethod_List_T = obj =>
+        {
+            var list = (List<int>)obj;
+            return list.Count > 0 ? list[0] : default(int);
+        };
 
         // Apply overrides and validate results
         mock.MockOverrides.ArrayMethod = array => "overridden_array";

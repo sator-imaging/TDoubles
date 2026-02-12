@@ -1,9 +1,12 @@
 using Microsoft.CodeAnalysis;
+
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Xml.Linq;
+
 using TDoubles.DataModels;
 
 namespace TDoubles
@@ -125,7 +128,7 @@ namespace TDoubles
             {
                 var baseName = GetCSharpKeywordOrTypeName(namedType.ConstructedFrom);
                 var typeArgs = namedType.TypeArguments.Select(ToConflictedMemberNameSuffix);
-                resolved = baseName + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
+                resolved = baseName + "_" + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
             }
 
             // Handle simple types
@@ -134,7 +137,7 @@ namespace TDoubles
                 resolved = GetCSharpKeywordOrTypeName(typeSymbol);
             }
 
-            return resolved.Replace("?", "");
+            return resolved.Replace("?", "").Replace("<", "_").Replace(">", "_");
         }
 
         /// <summary>
@@ -208,6 +211,14 @@ namespace TDoubles
             if (typeSymbol is INamedTypeSymbol namedType && namedType.IsGenericType)
             {
                 var baseName = GetCSharpKeywordOrTypeName(namedType.ConstructedFrom);
+
+                // Remove angle brackets if somehow present (extra safety)
+                var angleBracketIndex = baseName.IndexOf('<');
+                if (angleBracketIndex > 0)
+                {
+                    baseName = baseName.Substring(0, angleBracketIndex);
+                }
+
                 var typeArgs = namedType.TypeArguments.Select(ToIdentifierString);
                 return baseName + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
             }
