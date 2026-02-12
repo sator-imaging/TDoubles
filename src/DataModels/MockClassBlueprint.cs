@@ -17,6 +17,12 @@ namespace TDoubles.DataModels
         public INamespaceSymbol? MockNamespaceSymbol { get; set; }
 
         /// <summary>
+        /// Gets or sets the containing type hierarchy for nested classes (innermost to outermost).
+        /// Empty if the mock class is not nested.
+        /// </summary>
+        public List<INamedTypeSymbol> ContainingTypes { get; set; } = new List<INamedTypeSymbol>();
+
+        /// <summary>
         /// Gets or sets the target type symbol.
         /// </summary>
         public ITypeSymbol? TargetTypeSymbol { get; set; }
