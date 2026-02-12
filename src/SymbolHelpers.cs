@@ -173,6 +173,12 @@ namespace TDoubles
                 return $"\"{stringValue.Replace("\"", "\\\"")}\"";
             }
 
+            // Handle boolean literals (must be lowercase in C#)
+            if (defaultValue is bool boolValue)
+            {
+                return boolValue ? "true" : "false";
+            }
+
             // Handle other types
             return defaultValue.ToString() ?? "null";
         }
