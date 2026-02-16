@@ -40,6 +40,9 @@ public class Test12_ComplexParameterTypes
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => m.CustomMethod(new CustomClass { Value = "test" }), "invoke CustomMethod(CustomClass)");
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.ToString(), "invoke ToString()");
         exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.GetHashCode(), "invoke GetHashCode()");
+        exitCode += ValidationHelper.ValidateMemberExists(mock, m => _ = m.Equals(new object()), "invoke Equals(object)");
+        
+        // Apply overrides and validate OverloadMethod<int>(List<int>)
         exitCode += ValidationHelper.ValidateThrows(mock, m => _ = m.OverloadMethod<int>(new List<int> { 1, 2, 3 }), "TDoubles.TDoublesException", "OverloadMethod");
 
         mock.MockOverrides.OverloadMethod_List_T = obj =>
@@ -48,7 +51,6 @@ public class Test12_ComplexParameterTypes
             return list.Count > 0 ? list[0] : default(int);
         };
 
-        // Validate the override for OverloadMethod<int>(List<int>)
         exitCode += ValidationHelper.ValidateCall(mock, m => m.OverloadMethod<int>(new List<int> { 10, 20 }), 10);
 
         // Apply overrides and validate results
