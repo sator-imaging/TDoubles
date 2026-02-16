@@ -12,7 +12,7 @@ public partial class MockOverloadedMethods
 {
 }
 
-public class Test14_MethodOverloading
+public class Test37_MethodParameterDefault
 {
     static int Main()
     {
