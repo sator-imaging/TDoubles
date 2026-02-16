@@ -29,9 +29,9 @@ public class Test14_MethodOverloading
         // Apply overrides and validate results
         mock.MockOverrides.TestMethod = value => value.ToString();
 
-        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(), "true");
-        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(false), "false");
-        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(true), "true");
+        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(), "True");
+        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(false), "False");
+        exitCode += ValidationHelper.ValidateCall(mock, m => m.TestMethod(true), "True");
 
         return exitCode;
     }
