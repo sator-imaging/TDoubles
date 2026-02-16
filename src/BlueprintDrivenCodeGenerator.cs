@@ -386,7 +386,7 @@ namespace TDoubles
             sb.AppendLine("        /// <summary>");
             sb.AppendLine("        /// Container for method and property overrides.");
             sb.AppendLine("        /// </summary>");
-            sb.AppendLine("        public sealed class MockOverrideContainer");
+            sb.AppendLine("        public sealed partial class MockOverrideContainer");
             sb.AppendLine("        {");
 
             // Generate override properties for all members
