@@ -49,7 +49,7 @@ public class Test12_ComplexParameterTypes
         };
 
                 // Validate the override for OverloadMethod<int>(List<int>)
-        exitCode += ValidationHelper.ValidateCall(mock, m => m.OverloadMethod<int>(new List<int> { 10, 20 }), 10, "invoke OverloadMethod<int>(List<int>) after override");
+        exitCode += ValidationHelper.ValidateCall(mock, m => m.OverloadMethod<int>(new List<int> { 10, 20 }), 10);
 
         // Apply overrides and validate results
         mock.MockOverrides.ArrayMethod = array => "overridden_array";
