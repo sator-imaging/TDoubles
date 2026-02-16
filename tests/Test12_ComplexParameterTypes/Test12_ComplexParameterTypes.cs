@@ -48,6 +48,9 @@ public class Test12_ComplexParameterTypes
             return list.Count > 0 ? list[0] : default(int);
         };
 
+                // Validate the override for OverloadMethod<int>(List<int>)
+        exitCode += ValidationHelper.ValidateCall(mock, m => m.OverloadMethod<int>(new List<int> { 10, 20 }), 10, "invoke OverloadMethod<int>(List<int>) after override");
+
         // Apply overrides and validate results
         mock.MockOverrides.ArrayMethod = array => "overridden_array";
         // Generic method uses method-level type arg; override property uses object signature
