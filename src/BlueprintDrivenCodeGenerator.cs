@@ -1582,54 +1582,5 @@ namespace TDoubles
                 _ => "class"
             };
         }
-
-        /// <summary>
-        /// Gets the modifiers for a containing type.
-        /// </summary>
-        /// <param name="typeSymbol">The type symbol.</param>
-        /// <returns>The modifiers string.</returns>
-        private string GetTypeModifiers(INamedTypeSymbol typeSymbol)
-        {
-            var modifiers = new List<string>();
-
-            switch (typeSymbol.DeclaredAccessibility)
-            {
-                case Accessibility.Public:
-                    modifiers.Add("public");
-                    break;
-                case Accessibility.Private:
-                    modifiers.Add("private");
-                    break;
-                case Accessibility.Protected:
-                    modifiers.Add("protected");
-                    break;
-                case Accessibility.Internal:
-                    modifiers.Add("internal");
-                    break;
-                case Accessibility.ProtectedOrInternal:
-                    modifiers.Add("protected internal");
-                    break;
-                case Accessibility.ProtectedAndInternal:
-                    modifiers.Add("private protected");
-                    break;
-            }
-
-            if (typeSymbol.IsStatic)
-            {
-                modifiers.Add("static");
-            }
-
-            if (typeSymbol.IsAbstract && !typeSymbol.IsStatic)
-            {
-                modifiers.Add("abstract");
-            }
-
-            if (typeSymbol.IsSealed && !typeSymbol.IsStatic)
-            {
-                modifiers.Add("sealed");
-            }
-
-            return modifiers.Count > 0 ? string.Join(" ", modifiers) + " " : string.Empty;
-        }
     }
 }
