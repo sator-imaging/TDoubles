@@ -137,7 +137,7 @@ namespace TDoubles
                 resolved = GetCSharpKeywordOrTypeName(typeSymbol);
             }
 
-            return resolved.Replace("?", "").Replace("<", "_").Replace(">", "_");
+            return resolved.Replace("?", "");
         }
 
         /// <summary>
