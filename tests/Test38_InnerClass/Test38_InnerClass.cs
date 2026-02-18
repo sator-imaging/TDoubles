@@ -36,6 +36,6 @@ public class Test38_InnerClass
 {
     static int Main()
     {
-        return new OuterClass().Validate();
+        return new OuterClass<int, string>().Validate();
     }
 }
