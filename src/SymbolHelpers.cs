@@ -211,14 +211,6 @@ namespace TDoubles
             if (typeSymbol is INamedTypeSymbol namedType && namedType.IsGenericType)
             {
                 var baseName = GetCSharpKeywordOrTypeName(namedType.ConstructedFrom);
-
-                // Remove angle brackets if somehow present (extra safety)
-                var angleBracketIndex = baseName.IndexOf('<');
-                if (angleBracketIndex > 0)
-                {
-                    baseName = baseName.Substring(0, angleBracketIndex);
-                }
-
                 var typeArgs = namedType.TypeArguments.Select(ToIdentifierString);
                 return baseName + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
             }
