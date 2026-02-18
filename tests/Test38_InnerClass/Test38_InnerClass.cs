@@ -6,7 +6,7 @@ public interface IInnerClass
 {
     string TestMethod();
 }
-public partial class OuterClass
+public partial class OuterClass<T, U> where T : struct
 {
     [Mock(typeof(IInnerClass))]
     private partial class MockOverloadedMethods
