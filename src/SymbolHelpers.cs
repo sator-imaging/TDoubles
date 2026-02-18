@@ -128,7 +128,7 @@ namespace TDoubles
             {
                 var baseName = GetCSharpKeywordOrTypeName(namedType.ConstructedFrom);
                 var typeArgs = namedType.TypeArguments.Select(ToConflictedMemberNameSuffix);
-                resolved = baseName + "_" + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
+                resolved = baseName + string.Join("", typeArgs.Select(CapitalizeFirstLetter));
             }
 
             // Handle simple types
