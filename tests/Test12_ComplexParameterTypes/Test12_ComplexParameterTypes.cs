@@ -14,8 +14,6 @@ public interface IComplexParameters
     string ArrayMethod(string[] array);
     T GenericMethod<T>(List<T> list);
     void CustomMethod(CustomClass custom);
-    T OverloadMethod<T>(IEnumerable<T> items);
-    T OverloadMethod<T>(List<T> items);
 }
 
 // Test for complex parameter types including generics
