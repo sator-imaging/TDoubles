@@ -53,6 +53,8 @@ namespace TDoubles
                 sb.AppendLine("{");
             }
 
+            var containingTypeCount = GenerateContainingTypeStart(blueprint, sb);
+
             // Generate class declaration
             GenerateClassDeclaration(sb, blueprint);
 
@@ -111,6 +113,15 @@ namespace TDoubles
             // Close class
             sb.AppendLine("    }");
 
+            // Close containing types for nested classes
+            if (containingTypeCount > 0)
+            {
+                for (int i = 0; i < containingTypeCount; i++)
+                {
+                    sb.AppendLine("}");
+                }
+            }
+
             // Close namespace
             if (!string.IsNullOrEmpty(BlueprintHelpers.GetMockNamespace(blueprint)))
             {
@@ -118,6 +129,34 @@ namespace TDoubles
             }
 
             return sb.ToString();
+        }
+
+        private int GenerateContainingTypeStart(MockClassBlueprint blueprint, StringBuilder sb)
+        {
+            // Generate containing type declarations for nested classes (outermost to innermost)
+            var containingTypeCount = blueprint.ContainingTypes.Count;
+            if (containingTypeCount > 0)
+            {
+                // Reverse the list to go from outermost to innermost
+                for (int i = containingTypeCount - 1; i >= 0; i--)
+                {
+                    var containingType = blueprint.ContainingTypes[i];
+                    var typeKind = GetTypeKind(containingType);
+                    var typeName = containingType.Name;
+
+                    // Add generic type parameters if present
+                    if (containingType.TypeParameters.Length > 0)
+                    {
+                        var typeParams = string.Join(", ", containingType.TypeParameters.Select(tp => tp.Name));
+                        typeName = $"{typeName}<{typeParams}>";
+                    }
+
+                    sb.AppendLine($"partial {typeKind} {typeName}");
+                    sb.AppendLine("{");
+                }
+            }
+
+            return containingTypeCount;
         }
 
         /// <summary>
@@ -347,7 +386,7 @@ namespace TDoubles
             sb.AppendLine("        /// <summary>");
             sb.AppendLine("        /// Container for method and property overrides.");
             sb.AppendLine("        /// </summary>");
-            sb.AppendLine("        public sealed class MockOverrideContainer");
+            sb.AppendLine("        public sealed partial class MockOverrideContainer");
             sb.AppendLine("        {");
 
             // Generate override properties for all members
@@ -1521,6 +1560,27 @@ namespace TDoubles
             sb.Append(");");
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets the type kind string for a containing type (class, struct, record, etc.).
+        /// </summary>
+        /// <param name="typeSymbol">The type symbol.</param>
+        /// <returns>The type kind string.</returns>
+        private string GetTypeKind(INamedTypeSymbol typeSymbol)
+        {
+            if (typeSymbol.IsRecord)
+            {
+                return typeSymbol.IsValueType ? "record struct" : "record";
+            }
+
+            return typeSymbol.TypeKind switch
+            {
+                TypeKind.Class => "class",
+                TypeKind.Struct => "struct",
+                TypeKind.Interface => "interface",
+                _ => "class"
+            };
         }
     }
 }

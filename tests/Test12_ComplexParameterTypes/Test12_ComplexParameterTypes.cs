@@ -16,6 +16,7 @@ public interface IComplexParameters
     void CustomMethod(CustomClass custom);
 }
 
+// Test for complex parameter types including generics
 [Mock(typeof(IComplexParameters))]
 public partial class MockComplexParameters
 {

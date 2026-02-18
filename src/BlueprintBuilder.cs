@@ -44,6 +44,16 @@ namespace TDoubles
                 IsRecordStruct = targetType.IsRecord && targetType.IsValueType
             };
 
+            // Build containing type hierarchy for nested classes
+            var containingTypes = new List<INamedTypeSymbol>();
+            var currentContaining = mockClass.ContainingType;
+            while (currentContaining != null)
+            {
+                containingTypes.Add(currentContaining);
+                currentContaining = currentContaining.ContainingType;
+            }
+            blueprint.ContainingTypes = containingTypes;
+
             // Build the type hierarchy graph first as it's the single source of truth
             var typeGraph = TypeHierarchyGraph.Build(targetType, includeInternals, compilation);
 

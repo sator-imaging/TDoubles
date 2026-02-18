@@ -1,9 +1,12 @@
 using Microsoft.CodeAnalysis;
+
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Globalization;
+using System.Xml.Linq;
+
 using TDoubles.DataModels;
 
 namespace TDoubles
@@ -171,6 +174,12 @@ namespace TDoubles
             if (defaultValue is string stringValue)
             {
                 return $"\"{stringValue.Replace("\"", "\\\"")}\"";
+            }
+
+            // Handle boolean literals (must be lowercase in C#)
+            if (defaultValue is bool boolValue)
+            {
+                return boolValue ? "true" : "false";
             }
 
             // Handle other types
