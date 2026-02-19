@@ -228,7 +228,7 @@ partial class UserServiceMock
     partial void OnWillMockCall(string memberName, object?[] args);
 
     // 覆盖配置对象
-    public sealed class MockOverrideContainer { }
+    public sealed partial class MockOverrideContainer { }
     public MockOverrideContainer MockOverrides { get; }
 
     // 所有接口/类成员都已实现
@@ -556,7 +556,7 @@ partial class Mock<T>
     public TMethod GenericMethod<T, TMethod>(T input) { ... }
 
     // <TMethod> 可以添加到此类中，但它也必须作为类型级参数公开...
-    public sealed class MockOverrideContainer
+    public sealed partial class MockOverrideContainer
     {
         // 使用了类型级参数 T，但 TMethod 被遮蔽为 object
         public Func<T, object> GenericMethod { get; set; }
@@ -700,8 +700,6 @@ public override (M t, N? u) TypeArgMappingNullable_Abstract<M, N>() { }
 - 缺失功能
     - `ref` 返回
     - 属性保留
-    - 支持嵌套类型（例如，`[Mock(typeof(Foo.Bar))]`）
-    - 嵌套泛型类型模拟（例如，`[Mock(typeof(Foo.NestedKeyValueStore<,>))]`）
     - 为模拟成员添加适当的 `<inheritdoc cref="..." />`
     - 支持 `default` 和 `allows ref struct` 类型约束
         - `default` 约束仅在覆盖和显式接口实现方法上有效

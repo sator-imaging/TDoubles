@@ -252,7 +252,7 @@ partial class UserServiceMock
     partial void OnWillMockCall(string memberName, object?[] args);
 
     // Override configuration object
-    public sealed class MockOverrideContainer { }
+    public sealed partial class MockOverrideContainer { }
     public MockOverrideContainer MockOverrides { get; }
 
     // All interface/class members are implemented
@@ -617,7 +617,7 @@ partial class Mock<T>
     public TMethod GenericMethod<T, TMethod>(T input) { ... }
 
     // <TMethod> can be added to this class but it must also be exposed as type-level parameter...
-    public sealed class MockOverrideContainer
+    public sealed partial class MockOverrideContainer
     {
         // type-level parameter T is used but TMethod is shadowed to object
         public Func<T, object> GenericMethod { get; set; }
@@ -787,8 +787,6 @@ If you discover a security vulnerability, please report it privately by emailing
 - Missing Features
     - `ref` return
     - Attribute preservation
-    - Support for nested types (e.g., `[Mock(typeof(Foo.Bar))]`)
-    - Nested generic type mocking (e.g., `[Mock(typeof(Foo.NestedKeyValueStore<,>))]`)
     - Add proper `<inheritdoc cref="..." />` for mock members
     - Support for `default` and `allows ref struct` type constraint
         - The `default` constraint is valid on override and explicit interface implementation methods only
