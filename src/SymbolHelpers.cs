@@ -379,6 +379,12 @@ namespace TDoubles
             // For primitive types, use the special types format which gives us keywords
             if (typeSymbol.SpecialType != SpecialType.None)
             {
+                // For generic special types (e.g., IEnumerable<T>), use just the Name
+                // to avoid including angle brackets that break identifier generation.
+                if (typeSymbol is INamedTypeSymbol named && named.IsGenericType)
+                {
+                    return named.Name;
+                }
                 return typeSymbol.ToDisplayString(CSharpShortErrorMessageFormat);
             }
 
