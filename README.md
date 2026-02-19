@@ -1,5 +1,5 @@
 [![nuget](https://img.shields.io/nuget/vpre/SatorImaging.TDoubles)](https://www.nuget.org/packages/SatorImaging.TDoubles)
-[![build](https://github.com/sator-imaging/TDoubles/actions/workflows/test.yml/badge.svg)](https://github.com/sator-imaging/TDoubles/actions/workflows/test.yml)
+[![test](https://github.com/sator-imaging/TDoubles/actions/workflows/test.yml/badge.svg)](https://github.com/sator-imaging/TDoubles/actions/workflows/test.yml)
 &nbsp;
 [![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sator-imaging/TDoubles)
 
