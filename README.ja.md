@@ -234,7 +234,7 @@ partial class UserServiceMock
     partial void OnWillMockCall(string memberName, object?[] args);
 
     // オーバーライド構成オブジェクト
-    public sealed class MockOverrideContainer { }
+    public sealed partial class MockOverrideContainer { }
     public MockOverrideContainer MockOverrides { get; }
 
     // すべてのインターフェース/クラスメンバーが実装されます
@@ -563,7 +563,7 @@ partial class Mock<T>
     public TMethod GenericMethod<T, TMethod>(T input) { ... }
 
     // <TMethod> はこのクラスに追加できますが、型レベルのパラメーターとしても公開する必要があります...
-    public sealed class MockOverrideContainer
+    public sealed partial class MockOverrideContainer
     {
         // 型レベルのパラメーター T が使用されますが、TMethod は object にシャドウされます
         public Func<T, object> GenericMethod { get; set; }
@@ -707,8 +707,6 @@ public override (M t, N? u) TypeArgMappingNullable_Abstract<M, N>() { }
 - 不足している機能
     - `ref` 戻り値
     - 属性の保持
-    - ネストされた型のサポート (例: `[Mock(typeof(Foo.Bar))]`)
-    - ネストされたジェネリック型のモック (例: `[Mock(typeof(Foo.NestedKeyValueStore<,>))]`)
     - モックメンバーに適切な `<inheritdoc cref="..." />` を追加
     - `default` および `allows ref struct` 型制約のサポート
         - `default` 制約は、オーバーライドおよび明示的なインターフェース実装メソッドでのみ有効
