@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -313,16 +314,7 @@ namespace TDoubles
         /// <returns>The accessibility string in lowercase format.</returns>
         public static string ToAccessibilityString(AccessibilityLevel accessibilityLevel)
         {
-            return accessibilityLevel switch
-            {
-                AccessibilityLevel.Public => "public",
-                AccessibilityLevel.Private => "private",
-                AccessibilityLevel.Protected => "protected",
-                AccessibilityLevel.Internal => "internal",
-                AccessibilityLevel.ProtectedInternal => "protected internal",
-                AccessibilityLevel.PrivateProtected => "private protected",
-                _ => "private"
-            };
+            return SyntaxFacts.GetText((Accessibility)accessibilityLevel);
         }
 
         /// <summary>

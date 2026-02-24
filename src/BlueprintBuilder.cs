@@ -896,16 +896,7 @@ namespace TDoubles
         /// <returns>The corresponding AccessibilityLevel enum value.</returns>
         private AccessibilityLevel ConvertAccessibility(Accessibility accessibility)
         {
-            return accessibility switch
-            {
-                Accessibility.Public => AccessibilityLevel.Public,
-                Accessibility.Private => AccessibilityLevel.Private,
-                Accessibility.Protected => AccessibilityLevel.Protected,
-                Accessibility.Internal => AccessibilityLevel.Internal,
-                Accessibility.ProtectedOrInternal => AccessibilityLevel.ProtectedInternal,
-                Accessibility.ProtectedAndInternal => AccessibilityLevel.PrivateProtected,
-                _ => AccessibilityLevel.Private
-            };
+            return (AccessibilityLevel)accessibility;
         }
 
         /// <summary>
