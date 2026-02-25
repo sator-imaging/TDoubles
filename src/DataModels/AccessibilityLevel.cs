@@ -1,3 +1,5 @@
+using Microsoft.CodeAnalysis;
+
 namespace TDoubles.DataModels
 {
     /// <summary>
@@ -6,33 +8,38 @@ namespace TDoubles.DataModels
     public enum AccessibilityLevel
     {
         /// <summary>
+        /// Not applicable accessibility.
+        /// </summary>
+        NotApplicable = Accessibility.NotApplicable,
+
+        /// <summary>
         /// Public accessibility - accessible from anywhere.
         /// </summary>
-        Public,
+        Public = Accessibility.Public,
 
         /// <summary>
         /// Private accessibility - accessible only within the same class.
         /// </summary>
-        Private,
+        Private = Accessibility.Private,
 
         /// <summary>
         /// Protected accessibility - accessible within the same class and derived classes.
         /// </summary>
-        Protected,
+        Protected = Accessibility.Protected,
 
         /// <summary>
         /// Internal accessibility - accessible within the same assembly.
         /// </summary>
-        Internal,
+        Internal = Accessibility.Internal,
 
         /// <summary>
         /// Protected internal accessibility - accessible within the same assembly or derived classes.
         /// </summary>
-        ProtectedInternal,
+        ProtectedInternal = Accessibility.ProtectedOrInternal,
 
         /// <summary>
         /// Private protected accessibility - accessible within the same assembly and derived classes.
         /// </summary>
-        PrivateProtected
+        PrivateProtected = Accessibility.ProtectedAndInternal
     }
 }
