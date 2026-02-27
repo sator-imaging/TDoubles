@@ -55,7 +55,7 @@ namespace TDoubles
         /// <summary>
         /// Regular expression to match the innermost generic type arguments.
         /// </summary>
-        private static readonly Regex _innermostGenericRegex = new Regex(@"<([^<>]*)>", RegexOptions.Compiled | RegexOptions.RightToLeft);
+        private static readonly Regex _innermostGenericRegex = new Regex(@"<([^<>]*)>", RegexOptions.Compiled | RegexOptions.RightToLeft | RegexOptions.CultureInvariant);
 
         /// <summary>
         /// Gets the actual interface type for an explicitly implemented member.
