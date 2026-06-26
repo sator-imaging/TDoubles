@@ -28,10 +28,10 @@ jobs:
           #       delete resulting, incomplete .nupkg file. then, build again by `dotnet pack` to
           #       create valid package file.
           cd src
-          dotnet build  -c Release  -f ${{ env.BUILD_TARGET }}
+          dotnet build  -c Release
 
           rm -f bin/Release/*.nupkg
-          dotnet pack   -c Release  -f ${{ env.BUILD_TARGET }}
+          dotnet pack   -c Release
 
       - name: Test (release)
         run: |
