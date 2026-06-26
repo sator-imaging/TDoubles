@@ -3,19 +3,20 @@ on:
     types: [published]
   workflow_dispatch:
 
-jobs:
-  publish:
+env:
+  BUILD_TARGET: net10.0
 
+jobs:
+
+  publish:
     permissions:
       id-token: write  # enable GitHub OIDC token issuance for this job
       contents: read   # required for private repo
 
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
@@ -27,16 +28,17 @@ jobs:
           #       delete resulting, incomplete .nupkg file. then, build again by `dotnet pack` to
           #       create valid package file.
           cd src
-          dotnet build  -c Release
+          dotnet build  -c Release  -f ${{ env.BUILD_TARGET }}
+
           rm -f bin/Release/*.nupkg
-          dotnet pack   -c Release
+          dotnet pack   -c Release  -f ${{ env.BUILD_TARGET }}
 
       - name: Test (release)
         run: |
           for FILE in tests/**/Test*.csproj; do
             if [ -f "$FILE" ]; then
               echo "Testing: $FILE"
-              dotnet run --project "$FILE"  -c Release
+              dotnet run --project "$FILE"  -c Release  -f ${{ env.BUILD_TARGET }}
             fi
           done
 
