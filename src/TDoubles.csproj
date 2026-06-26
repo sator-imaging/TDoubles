@@ -24,10 +24,6 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" PrivateAssets="all" />
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
   <!-- .NET 5+ Analyzer -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
