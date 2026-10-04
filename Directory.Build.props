@@ -24,6 +24,7 @@
     <NuGetPublishProjectRootRelPath>..</NuGetPublishProjectRootRelPath>
     <NuGetPublishIconFile>icon-128px.png</NuGetPublishIconFile>
     <NuGetPublishReadmeFile>README.md</NuGetPublishReadmeFile>
+    <NuGetPublishLicenseFile>LICENSE.md</NuGetPublishLicenseFile>
     <NuGetPublishID>SatorImaging.TDoubles</NuGetPublishID>
     <NuGetPublishTitle>TDoubles</NuGetPublishTitle>
     <NuGetPublishProduct>$(NuGetPublishTitle)</NuGetPublishProduct>

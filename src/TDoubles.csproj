@@ -46,6 +46,9 @@
 		<None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishReadmeFile)">
 			<Pack>True</Pack><PackagePath>/</PackagePath>
 		</None>
+    <None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishLicenseFile)">
+      <Pack>true</Pack><PackagePath>/</PackagePath>
+    </None>
 	</ItemGroup>
   <PropertyGroup>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
