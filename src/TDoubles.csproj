@@ -39,17 +39,17 @@
   </ItemGroup>
 
   <!-- nuget.org publish settings -->
-	<ItemGroup>
-		<None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishIconFile)">
-			<Pack>True</Pack><PackagePath>/</PackagePath>
-		</None>
-		<None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishReadmeFile)">
-			<Pack>True</Pack><PackagePath>/</PackagePath>
-		</None>
+  <ItemGroup>
+    <None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishIconFile)">
+      <Pack>True</Pack><PackagePath>/</PackagePath>
+    </None>
+    <None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishReadmeFile)">
+      <Pack>True</Pack><PackagePath>/</PackagePath>
+    </None>
     <None Include="$(NuGetPublishProjectRootRelPath)/$(NuGetPublishLicenseFile)">
       <Pack>true</Pack><PackagePath>/</PackagePath>
     </None>
-	</ItemGroup>
+  </ItemGroup>
   <PropertyGroup>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 
